@@ -530,13 +530,12 @@ class LoopCheckHandler():
                 if current_track != known_track:
                     modified_songs.append((known_track, current_track))
 
-        combined_channels = self.bot.config.channels
-        combined_channels.extend(self.bot.config.users)
-
         already_sent_to = []
         duplicates = []
 
-        for channel_to_send in combined_channels:
+        print(f'Sending to {len(self.bot.config.channels + self.bot.config.users)} channels...')
+
+        for channel_to_send in self.bot.config.channels + self.bot.config.users:
             # check for duplicates
             if channel_to_send.id in already_sent_to:
                 print(f'DUPLICATE DETECTED: {channel_to_send.id}')
@@ -619,6 +618,6 @@ class LoopCheckHandler():
         if len(duplicates) > 0:
             print('Warning: Duplicates detected!')
             print('Please check!\n' * 10)
-            print('Duplicates: ' + ', '.join(duplicates))
+            print('Duplicates: ' + ', '.join([str(_id) for _id in duplicates]))
 
         print(f"Done checking for new songs:\nNew: {len(new_songs)}\nModified: {len(modified_songs)}\nRemoved: {len(removed_songs)}")
